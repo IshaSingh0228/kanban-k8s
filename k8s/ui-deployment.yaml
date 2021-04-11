@@ -1,0 +1,40 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: kanban-ui
+spec:
+  selector:
+    matchLabels:
+      app: kanban-ui
+  replicas: 1
+  template:
+    metadata:
+      labels:
+        app: kanban-ui
+    spec:
+      containers:
+        - name: kanban-ui
+          image: bharathvelisala/challenge-ui
+          imagePullPolicy: Always
+          ports:
+            - containerPort: 80
+          resources:
+            limits:
+              memory: "128Mi"  #128 mb
+              cpu: "100m"       #200 mili cpu i.e 20% of cpu
+
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: kanban-ui
+  labels:
+    app: kanban-ui
+spec:
+  type: NodePort
+  selector:
+    app: kanban-ui
+  ports:
+   - name: http
+     port: 8080
+     targetPort: 80
